@@ -1,0 +1,70 @@
+[
+    {
+        "name": "UpCloudAuditLogs_CL",
+        "type": "Microsoft.OperationalInsights/workspaces/tables",
+        "apiVersion": "2025-02-01",
+        "location": "{{location}}",
+        "properties": {
+            "schema": {
+                "name": "UpCloudAuditLogs_CL",
+                "columns": [
+                    {
+                        "name": "TimeGenerated",
+                        "type": "datetime",
+                        "description": "Time at which the audit log was recorded."
+                    },
+                    {
+                        "name": "AuthType",
+                        "type": "string",
+                        "description": "Authentication method used for the event (basic_auth, gui, daemon, or null for internal events)."
+                    },
+                    {
+                        "name": "CloudEventId",
+                        "type": "string",
+                        "description": "Unique cloud event identifier for the audit log entry."
+                    },
+                    {
+                        "name": "UpcloudCorrelationId",
+                        "type": "string",
+                        "description": "Unique ID given to the event. Can occur multiple times for separate audit log events."
+                    },
+                    {
+                        "name": "ResourceType",
+                        "type": "string",
+                        "description": "Type of resource such as account, auth, server, storage, managed-database, etc."
+                    },
+                    {
+                        "name": "ResourceSubType",
+                        "type": "string",
+                        "description": "Sub-type of the resource providing additional context (e.g., session-api-token, api-token, service)."
+                    },
+                    {
+                        "name": "Action",
+                        "type": "string",
+                        "description": "Action performed on the resource (create, read, update, delete, access-update, attach, detach, login, logout)."
+                    },
+                    {
+                        "name": "Origin",
+                        "type": "string",
+                        "description": "Origin of the interface where the event was triggered (api, gui, or upcloud_internal)."
+                    },
+                    {
+                        "name": "AccountUsername",
+                        "type": "string",
+                        "description": "Username of the account or subaccount performing the event."
+                    },
+                    {
+                        "name": "IpAddress",
+                        "type": "string",
+                        "description": "Source IP address of the event, if one could be determined."
+                    },
+                    {
+                        "name": "UpCloudResourceId",
+                        "type": "string",
+                        "description": "The UUID of the resource that the audit log relates to."
+                    }
+                ]
+            }
+        }
+    }
+]

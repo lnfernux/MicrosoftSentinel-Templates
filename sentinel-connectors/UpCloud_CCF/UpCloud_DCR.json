@@ -1,0 +1,89 @@
+{
+    "name": "UpCloudDCR",
+    "apiVersion": "2024-03-11",
+    "type": "Microsoft.Insights/dataCollectionRules",
+    "kind": "Direct",
+    "location": "{{location}}",
+    "tags": {
+        "createdBy": "SentinelCodelessConnector"
+    },
+    "properties": {
+        "streamDeclarations": {
+            "Custom-UpCloudAuditLogs_CL": {
+                "columns": [
+                    {
+                        "name": "time",
+                        "type": "string",
+                        "description": "Time at which the audit log was recorded (ISO format)."
+                    },
+                    {
+                        "name": "auth_type",
+                        "type": "string",
+                        "description": "Authentication method used for the event (basic_auth, gui, daemon, or null for internal events)."
+                    },
+                    {
+                        "name": "cloud_event_id",
+                        "type": "string",
+                        "description": "Unique cloud event identifier for the audit log entry."
+                    },
+                    {
+                        "name": "upcloud_correlation_id",
+                        "type": "string",
+                        "description": "Unique ID given to the event. Can occur multiple times for separate audit log events."
+                    },
+                    {
+                        "name": "resource_type",
+                        "type": "string",
+                        "description": "Type of resource such as account, auth, server, storage, managed-database, etc."
+                    },
+                    {
+                        "name": "resource_sub_type",
+                        "type": "string",
+                        "description": "Sub-type of the resource providing additional context (e.g., session-api-token, api-token, service)."
+                    },
+                    {
+                        "name": "action",
+                        "type": "string",
+                        "description": "Action performed on the resource (create, read, update, delete, access-update, attach, detach, login, logout)."
+                    },
+                    {
+                        "name": "origin",
+                        "type": "string",
+                        "description": "Origin of the interface where the event was triggered (api, gui, or upcloud_internal)."
+                    },
+                    {
+                        "name": "account_username",
+                        "type": "string",
+                        "description": "Username of the account or subaccount performing the event."
+                    },
+                    {
+                        "name": "ip_address",
+                        "type": "string",
+                        "description": "Source IP address of the event, if one could be determined."
+                    },
+                    {
+                        "name": "resource_id",
+                        "type": "string",
+                        "description": "The UUID of the resource that the audit log relates to."
+                    }
+                ]
+            }
+        },
+        "destinations": {
+            "logAnalytics": [
+                {
+                    "workspaceResourceId": "{{workspaceResourceId}}",
+                    "name": "clv2ws1"
+                }
+            ]
+        },
+        "dataFlows": [
+            {
+                "streams": ["Custom-UpCloudAuditLogs_CL"],
+                "destinations": ["clv2ws1"],
+                "outputStream": "Custom-UpCloudAuditLogs_CL",
+                "transformKql": "source\n| extend TimeGenerated = todatetime(['time'])\n| project\n    TimeGenerated,\n    AuthType = auth_type,\n    CloudEventId = cloud_event_id,\n    UpcloudCorrelationId = upcloud_correlation_id,\n    ResourceType = resource_type,\n    ResourceSubType = resource_sub_type,\n    Action = action,\n    Origin = origin,\n    AccountUsername = account_username,\n    IpAddress = ip_address,\n    UpCloudResourceId = resource_id"
+            }
+        ]
+    }
+}
